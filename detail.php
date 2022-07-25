@@ -2,9 +2,10 @@
 
 require('functions.php');
 
-use Blog\Func;
+use Blog\Functions;
 
-$result = Func\getBlogDetail($_GET['id']);
+
+$result = Functions::getBlogDetail($_GET['id']);
 
 ?>
 <!DOCTYPE html>
@@ -17,11 +18,11 @@ $result = Func\getBlogDetail($_GET['id']);
 </head>
 <body>
     <h2>ブログ詳細</h2>
-    <h3>タイトル：<?= $result['title'] ?></h3>
-    <p>投稿日時：<?= $result['post_at'] ?></p>
-    <p>カテゴリー：<?= Func\setCategoryName($result['category']) ?></p>
+    <h3>タイトル：<?= Utils::h($result['title']) ?></h3>
+    <p>投稿日時：<?= Utils::h($result['post_at']) ?></p>
+    <p>カテゴリー：<?= Utils::h(Functions::setCategoryName($result['category'])) ?></p>
     <hr>
-    <p>本文：<?= $result['content'] ?></p>
+    <p>本文：<?= Utils::h($result['content'] ?></p>
     <br>
     <p><a href="index.php">ブログ一覧</a></p>
 </body>

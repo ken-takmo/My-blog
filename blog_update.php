@@ -4,7 +4,7 @@ require_once("dbConnect.php");
 use Blog\Dbc;
 
 $blogs = $_POST;
-
+var_dump($blogs);
 
 if(empty($blogs['title'])){
     exit('タイトルを入力してください');
@@ -23,19 +23,20 @@ if(empty($blogs['publish_status'])){
 
 $dbh = Dbc::dbConnect();
 $dbh->beginTransaction();
-$sql = 'INSERT INTO 
-            blog(title, content, category, publish_status)
-        VALUES
-            (:title, :content, :category, :publish_status)';
+$sql = 'UPDATE  
+            blog SET title = :title, content = :content, category = :category, publish_status = :publish_status
+        WHERE 
+            id = :id';
 try{
     $stmt = $dbh->prepare($sql);
+    $stmt->bindValue(':id', $blogs['id'], PDO::PARAM_INT);
     $stmt->bindValue(':title', $blogs['title'], PDO::PARAM_STR);
     $stmt->bindValue(':content', $blogs['content'], PDO::PARAM_STR);
     $stmt->bindValue(':category', $blogs['category'], PDO::PARAM_INT);
     $stmt->bindValue(':publish_status', $blogs['publish_status'], PDO::PARAM_INT);
     $stmt->execute();
     $dbh->commit();
-    echo '投稿されました';
+    echo '更新されました';
 } catch(PDOException $e) {
     $dbh->rollBack();
     exit($e);

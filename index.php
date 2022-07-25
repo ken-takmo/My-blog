@@ -1,7 +1,13 @@
 <?php
     require_once('functions.php');
-    use Blog\Func;
-    $blogData = Func\getAllBlog();
+    require_once('dbConnect.php');
+
+    use Blog\Dbc;
+    use Blog\Functions;
+    $blogData = Functions::getAllBlog();
+
+    // $dbc = new Dbc();
+    // var_dump($dbc);
 ?>
 
 
@@ -18,16 +24,18 @@
     <p><a href="/form.html">ブログ投稿</a></p>
     <table>
         <tr>
-           <th>No</th>
            <th>タイトル</th>
            <th>カテゴリー</th> 
+           <th>投稿日時</th>
         </tr>
         <?php foreach($blogData as $colum): ?>
         <tr>
-            <td><?= $colum['id'] ?></td>
-            <td><?= $colum['title'] ?></td>
-            <td><?= Func\setCategoryName($colum['category']) ?></td>
-            <td><a href="/detail.php?id=<?= $colum['id'] ?>">詳細</a></td>
+            <td><?= Utils::h($colum['title']) ?></td>
+            <td><?= Utils::h(Functions::setCategoryName($colum['category'])) ?></td>
+            <td><?= ($colum['post_at']) ?></td>
+            <td><a href="/detail.php?id=<?= Utils::h($colum['id']) ?>">詳細</a></td>
+            <td><a href="/update_form.php?id=<?= Utils::h($colum['id']) ?>">編集</a></td>
+            <td><a href="/blog_delete.php?id=<?= Utils::h($colum['id']) ?>">削除</a></td>
         </tr>
         <?php endforeach; ?>
     </table>
